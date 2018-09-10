@@ -13,7 +13,7 @@
     "backup"
   ],
   "author": "Eduardo Quagliato <eduardo@quagliato.me>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "compressjs": "^1.0.3",
     "dotenv": "^6.0.0",
@@ -23,5 +23,14 @@
     "nodegit": "^0.22.2",
     "rimraf": "^2.6.2",
     "tar": "^4.4.6"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quagliato/github-org-backup.git"
+  },
+  "bugs": {
+    "url": "https://github.com/quagliato/github-org-backup/issues"
+  },
+  "homepage": "https://github.com/quagliato/github-org-backup#readme"
 }
