@@ -1,6 +1,6 @@
 # github-user-backup
 
-Backups all repos of a single organization.
+Backup all repos of your organization.
 
 ## Step-by-step *(ooh baby)*
 
@@ -10,3 +10,7 @@ Backups all repos of a single organization.
   * *orgHandle*: the github handler name of your organization
   * *relativePathDirectory*: the relative path to the directoy where the repos
     will be stored. If nothing is setted here, it will use `./localRepos/`
+
+## Needs help?
+
+Contact me at [eduardo@quagliato.me](mailto:eduardo@quagliato.me)
