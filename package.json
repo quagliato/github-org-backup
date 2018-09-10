@@ -1,0 +1,27 @@
+{
+  "name": "github-org-backup",
+  "version": "1.0.0",
+  "description": "Run a full backup of all your Github's git repositories.",
+  "main": "run.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "backup"
+  ],
+  "author": "Eduardo Quagliato <eduardo@quagliato.me>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "compressjs": "^1.0.3",
+    "dotenv": "^6.0.0",
+    "fildes-extra": "^0.6.0",
+    "got": "^9.0.0",
+    "moment": "^2.22.2",
+    "nodegit": "^0.22.2",
+    "rimraf": "^2.6.2",
+    "tar": "^4.4.6"
+  }
+}
