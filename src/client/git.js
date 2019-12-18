@@ -1,4 +1,3 @@
-const fs = require('fs')
 const git = require('nodegit')
 const {
   GIT_USER,

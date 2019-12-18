@@ -1,25 +1,28 @@
 const compressor = require('./utils/compressor')
 const fs = require('fs')
 const githubClient = require('./client/github')
-const gitClient = require('./client/git')
+const gitClient = require('./client/git-simple')
 const fildes = require('fildes-extra')
 const path = require('path')
 
+const repoPath = (localPath, repoName) => `${localPath}/${repoName}`
+
 async function processRepo (orgHandle, reposPath, repo) {
-  const localPath = `${path.dirname(require.main.filename)}/${reposPath}/${repo}`
+  const localPath = `${path.dirname(require.main.filename)}/${reposPath}`
   // if (fs.existsSync(localPath)) {
   //   await fildes.rmdir(localPath)
   // }
 
-  return gitClient.openRepo(`git@github.com:${orgHandle}/${repo}`, localPath)
-    // .then(localPath => compressor.compressDir(localPath, `${localPath}.tar.gz`))
-    // .then(compressResult => {
-    //   log(`Excluindo diretório ${localPath}...`)
-    //   return fildes.rmdir(localPath)
+  // const repoPathA = repoPath(localPath, repo)
+  return gitClient.openRepo(orgHandle, repo, localPath)
+    // .then(() => compressor.compressDir(repoPathA, `${repoPathA}.tar.gz`))
+    // .then(() => {
+    //   log(`Excluindo diretório ${repoPathA}...`)
+    //   return fildes.rmdir(repoPathA)
     // })
-    // .then(exclusionResult => {
-    //   log(`Diretório ${localPath} excluído.`)
-    //   return localPath
+    // .then(() => {
+    //   log(`Diretório ${repoPathA} excluído.`)
+    //   return repoPathA
     // })
 }
 
