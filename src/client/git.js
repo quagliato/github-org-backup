@@ -1,3 +1,4 @@
+const fs = require('fs')
 const git = require('nodegit')
 const {
   GIT_USER,
@@ -7,7 +8,7 @@ const {
 } = process.env
 
 function cloneRepo(remotePath, localPath) {
-  log(`Clonando repositório ${remotePath} em ${localPath}...`)
+  log(`Cloning repo ${remotePath} in ${localPath}...`)
   const options = {
     fetchOpts: {
       callbacks: {
@@ -22,18 +23,29 @@ function cloneRepo(remotePath, localPath) {
     }
   }
   return git.Clone(remotePath, localPath, options)
-    .then(result => {
-      log(`Processo finalizado. Resultado:`)
-      log(result)
-      return localPath
+    .then(() => {
+      log(`Repo ${remotePath} cloned.`)
+      return openRepo(remotePath, localPath)
     })
     .catch(err => {
       log(err, 'CRITICAL')
-      throw new Error('Não foi possível clonar esse repositório.')
+      throw new Error('It was not possible to clone this repo.')
     })
 }
 
-function fetchAllRepo(localPath) {
+function openRepo(remotePath, localPath) {
+  return git.Repository.open(localPath)
+    .then(repo => {
+      log(`Repo ${localPath} is cloned, fetching it...`)
+      return fetchAllRepo(repo, localPath)
+    })
+    .catch(err => {
+      log(`Repo ${remotePath} is not cloned, it will be cloned.`)
+      return cloneRepo(remotePath, localPath)
+    })
+}
+
+function fetchAllRepo(repo, localPath) {
   const options = {
     callbacks: {
       credentials: function (url, userName) {
@@ -46,12 +58,14 @@ function fetchAllRepo(localPath) {
     }
   }
 
-  return git.Repository.open(localPath)
-    .then(repo => repo.fetchAll(options))
-    .then(() => localPath)
+  return repo.fetchAll(options)
+    .then(fetchAllResult => {
+      log(`Repo ${localPath} fetched.`)
+      return localPath
+    })
     .catch(err => {
       log(err, 'CRITICAL')
-      throw new Error('Não foi possível executar um fetch neste repositório.')
+      throw new Error('It was not possible to fetch this repo.')
     })
 }
 
@@ -67,6 +81,7 @@ function getRemotes(localPath) {
 }
 
 module.exports = {
+  openRepo,
   cloneRepo,
   fetchAllRepo,
   getRemote,

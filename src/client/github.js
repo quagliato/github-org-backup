@@ -6,10 +6,10 @@ const {
 } = process.env
 
 function listOrgRepos (orgHandle, page = 1) {
-  log(`Buscando repositórios da organização ${orgHandle}...`)
+  log(`Searching repos for org ${orgHandle}...`)
   
   const getRepos = (orgHandle, page) => {
-    log(`Página ${page}...`)
+    log(`Page ${page}...`)
     let authToken = `${GITHUB_AUTH_USER}:${GITHUB_AUTH_TOKEN}`
     authToken = Buffer.from(authToken).toString('base64')
     return got(`${GITHUB_API_URL}/orgs/${orgHandle}/repos?type=all&page=${page}`, {
@@ -20,7 +20,7 @@ function listOrgRepos (orgHandle, page = 1) {
     })
     .then(async result => {
       result.body = JSON.parse(result.body)
-      log(`Página ${page}: retornados ${result.body.length} repositórios.`)
+      log(`Page ${page}: Found ${result.body.length} repos.`)
       if (result.body.length > 0) {
         return [
           ...result.body,
@@ -34,12 +34,12 @@ function listOrgRepos (orgHandle, page = 1) {
   
   return getRepos(orgHandle, page)
     .then(result => {
-      log(`Total de repositórios encontrados: ${result.length}`)
+      log(`Repos found: ${result.length}`)
       return result
     })
     .catch(err => {
       log(err, 'CRITICAL')
-      throw new Error(`Não foi possível listar os repositórios da organizaçao ${orgHandle}.`)
+      throw new Error(`It was not possible to find ${orgHandle} repositories.`)
     })
 }
 
