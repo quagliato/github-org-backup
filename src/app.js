@@ -7,7 +7,6 @@ const path = require('path')
 const {
   GITHUB_AUTH_TOKEN,
   GITHUB_AUTH_USER,
-  DEBUG
 } = process.env
 
 const createRemote = (orgHandle, repoName) => `https://${GITHUB_AUTH_USER}:${GITHUB_AUTH_TOKEN}@github.com/${orgHandle}/${repoName}`
@@ -32,6 +31,7 @@ function chunkRepos (repos) {
 }
 
 async function run () {
+  const begin = new Date()
   const orgHandle = process.argv[2]
   const reposPath = `${process.argv[3] || 'localRepos'}/${orgHandle}`
   
@@ -52,6 +52,10 @@ async function run () {
       await Promise.all(chunk.map(repo => processRepo(orgHandle, reposPath, repo)))
     }
 
+    const end = new Date()
+    log(`begin: ${begin}`)
+    log(`end: ${end}`)
+    log(`diff: ${end - begin}ms`)
     process.exit(0)
   } catch (e) {
     log(e, 'CRITICAL')
