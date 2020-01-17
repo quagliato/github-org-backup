@@ -70,8 +70,23 @@ const pull = (repo, branch) => {
     .then(() => repo.pull('origin', branch))
     .then(() => repo)
     .catch(err => {
-      log(err, 'CRITICAL')
-      throw new Error(`Could not pull branch ${branch} of this repo.`)
+      log(err, 'WARNING')
+      log(`Branch ${branch} does not exist anymore.`)
+      return deleteBranch(repo, branch)
+    })
+}
+
+const deleteBranch = (repo, branch) => {
+  return repo
+    .checkout('master')
+    .then(() => repo.deleteLocalBranch(branch))
+    .then(() => {
+      log(`Branch ${branch} deleted`)
+      return repo
+    })
+    .catch(err => {
+      log(err, 'WARNING')
+      return repo
     })
 }
 
