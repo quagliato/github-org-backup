@@ -1,23 +1,14 @@
 const fildesExtra = require('fildes-extra')
 const fs = require('fs')
 const githubClient = require('./client/github')
-const gitClient = require('./client/git-simple')
+const GitRepo = require('./client/git-simple')
 const path = require('path')
 
-const {
-  GITHUB_AUTH_TOKEN,
-  GITHUB_AUTH_USER,
-} = process.env
-
-const createRemote = (orgHandle, repoName) => `https://${GITHUB_AUTH_USER}:${GITHUB_AUTH_TOKEN}@github.com/${orgHandle}/${repoName}`
-const repoPath = (localPath, repoName) => `${localPath}/${repoName}`
-
-async function processRepo (orgHandle, reposPath, repo) {
+function processRepo (orgHandle, reposPath, repo) {
   const localPath = `${path.dirname(require.main.filename)}/${reposPath}`
   log(`Processing ${orgHandle}/${repo}...`)
-  return gitClient.openRepo(repoPath(localPath, repo), createRemote(orgHandle, repo))
-    .then(gitRepo => gitClient.fetchAll(gitRepo))
-    .then(gitRepo => gitClient.pullAllBranches(gitRepo))
+  const gitRepo = new GitRepo(orgHandle, repo, localPath)
+  return gitRepo.pullAllBranches()
 }
 
 function chunkRepos (repos) {
